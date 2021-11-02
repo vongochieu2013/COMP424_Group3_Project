@@ -14,10 +14,10 @@ include_once 'header.php';
 
   <?php
     if (isset($_GET["error"])) {
-      if ($_GET["error"] == "emptyinput") {
-        echo "<p>Fill in all fields!</p>";
-      } else if ($_GET["error"] == "wronglogin") {
-        echo "<p>Incorrect login information!</p>";
+      if ($_GET["error"] == "usernamedoesnotexist") {
+        echo "<p>Username or email doesn't exist!</p>";
+      } else if ($_GET["error"] == "wrongusernameorpassword") {
+        echo "<p>Incorrect login information! Please check for username or password!</p>";
       }
     }
   ?>

@@ -5,7 +5,8 @@
   <section class="index-intro">
     <?php
       if (isset($_SESSION["username"])) {
-        echo "<p>Hello there " . $_SESSION["username"]. "</p>";
+        echo "<p>Hello there, " . $_SESSION["username"]. "</p>";
+        echo "<p>You log in at: " . $_SESSION["datetime"]. "</p>";
       }
     ?>
     <h1>This is group 3!</h1>

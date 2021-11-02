@@ -93,11 +93,31 @@ function emptyInputLogin($username, $pwd) {
   return $result;
 }
 
+function createLogUserInfo($conn, $username, $status, $errormessage, $datetime) {
+  $sql = "INSERT INTO login_info (uid, status, error_message, created_at) VALUES (?, ?, ?, ?);"; // SQL Injection
+  $stmt = mysqli_stmt_init($conn);
+
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../signin.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ssss", $username, $status, $errormessage, $datetime);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  exit();
+}
+
 function loginUser($conn, $username, $pwd) {
   $uidExists = uidExists($conn, $username, $username);
+  date_default_timezone_set('America/Los_Angeles');
+  $datetime = date_create()->format('Y-m-d H:i:s');
 
   if ($uidExists === false) {
-    header("location: ../login.php?error=wronglogin");
+    $status = "failure";
+    $errorMessage = "usernamedoesnotexist";
+    header("location: ../login.php?error=$errorMessage");
+    createLogUserInfo($conn, $username, $status, $errorMessage, $datetime);
     exit();
   }
 
@@ -105,13 +125,20 @@ function loginUser($conn, $username, $pwd) {
   $checkPwd = password_verify($pwd, $pwdHashed);
 
   if ($checkPwd === false) {
-    header("location: ../login.php?error=wronglogin");
+    $status = "failure";
+    $errorMessage = "wrongusernameorpassword";
+    header("location: ../login.php?error=$errorMessage");
+    createLogUserInfo($conn, $username, $status, $errorMessage, $datetime);
     exit();
   } else if ($checkPwd === true) {
+    $status = "success";
+    $errorMessage = null;
     session_start();
     $_SESSION["userid"] = $uidExists["id"];
     $_SESSION["username"] = $uidExists["uid"];
+    $_SESSION["datetime"] = $datetime;
     header("location: ../index.php");
+    createLogUserInfo($conn, $username, $status, $errorMessage, $datetime);
     exit();
   }
 }
