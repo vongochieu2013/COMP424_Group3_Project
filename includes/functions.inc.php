@@ -30,6 +30,17 @@ function invalidEmail($email)  {
   return $result;
 }
 
+function pwdLessThanSixCharacters($pwd) {
+  $result = true;
+  if (strlen($pwd) < 6) {
+    $result = true;
+  } else {
+    $result = false;
+  }
+  return $result;
+}
+
+
 function pwdMatch($pwd, $pwdRepeat) {
   $result = true;
   if ($pwd !== $pwdRepeat) {
@@ -62,7 +73,6 @@ function uidExists($conn, $username, $email) {
   }
 
   mysqli_stmt_close($stmt);
-
 }
 
 function createUser($conn, $firstname, $lastname, $email, $username, $pwd) {
@@ -105,13 +115,38 @@ function createLogUserInfo($conn, $username, $status, $errormessage, $datetime) 
   mysqli_stmt_bind_param($stmt, "ssss", $username, $status, $errormessage, $datetime);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
-  exit();
+//  exit();
+}
+
+function getUserLoginTime($conn, $username, $status) {
+  $sql="SELECT count(*) AS total FROM login_info WHERE uid = ? AND status = ?";
+  $stmt = mysqli_stmt_init($conn);
+
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../signup.php?error=stmtfailed");
+    exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "ss", $username, $status);
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+
+  if ($row = mysqli_fetch_assoc($resultData)) { // if we do get some data, we return true
+    return $row['total'];
+  } else {
+    $result = false;
+    return $result;
+  }
+
+  mysqli_stmt_close($stmt);
 }
 
 function loginUser($conn, $username, $pwd) {
   $uidExists = uidExists($conn, $username, $username);
   date_default_timezone_set('America/Los_Angeles');
   $datetime = date_create()->format('Y-m-d H:i:s');
+  $yoyo = "7";
 
   if ($uidExists === false) {
     $status = "failure";
@@ -134,11 +169,13 @@ function loginUser($conn, $username, $pwd) {
     $status = "success";
     $errorMessage = null;
     session_start();
+    createLogUserInfo($conn, $username, $status, $errorMessage, $datetime);
+    $_SESSION["successfulLogin"] = getUserLoginTime($conn, $username, "success");
+    $_SESSION["failureLogin"] = getUserLoginTime($conn, $username, "failure");
     $_SESSION["userid"] = $uidExists["id"];
     $_SESSION["username"] = $uidExists["uid"];
     $_SESSION["datetime"] = $datetime;
     header("location: ../index.php");
-    createLogUserInfo($conn, $username, $status, $errorMessage, $datetime);
     exit();
   }
 }

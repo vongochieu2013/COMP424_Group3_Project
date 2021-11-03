@@ -11,6 +11,7 @@ include_once 'header.php';
       <button type="submit" name="submit">Log In</button>
     </form>
   </div>
+  <a href="reset-password.php">Forgot your password?</a>
 
   <?php
     if (isset($_GET["error"])) {
@@ -21,7 +22,6 @@ include_once 'header.php';
       }
     }
   ?>
-
 </section>
 
 

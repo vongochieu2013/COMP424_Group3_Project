@@ -24,6 +24,10 @@ if (isset($_POST["submit"])) {
     header("location: ../signup.php?error=invalidemail");
     exit();
   }
+  if (pwdLessThanSixCharacters($pwd) !== false) {
+    header("location: ../signup.php?error=passwordslengthlessthansix");
+    exit();
+  }
   if (pwdMatch($pwd, $pwdRepeat) !== false) {
     header("location: ../signup.php?error=passwordsdontmatch");
     exit();

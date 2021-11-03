@@ -24,6 +24,8 @@
           echo "<p>Choose a proper username!</p>";
         } else if ($_GET["error"] == "invalidemail") {
           echo "<p>Choose a proper email!</p>";
+        } else if ($_GET["error"] == "passwordslengthlessthansix") {
+          echo "<p>Password must be at least 6 characters!</p>";
         } else if ($_GET["error"] == "passwordsdontmatch") {
           echo "<p>Password doesn't match!</p>";
         } else if ($_GET["error"] == "stmtfailed") {
@@ -36,9 +38,7 @@
       }
     ?>
 
-    <a href="reset-password.php">Forgot your password?</a>
   </section>
-
 
 <?php
   include_once 'footer.php';
