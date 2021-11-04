@@ -28,7 +28,7 @@
   }
 
   // record digits in session variable
-  $_SESSION['captchadigit'] = $digit;
+  $_SESSION['digit'] = $digit;
 
   // display image and clean up
   header('Content-type: image/png');
