@@ -78,7 +78,7 @@ function uidExists($conn, $username, $email) {
 function createUser($conn, $firstname, $lastname, $email, $username, $pwd) {
   session_start();
   if ($_POST['captcha'] != $_SESSION['digit']) {
-    header("location: ../signup.php?error={$_SESSION['captchadigit']}");
+    header("location: ../signup.php?error=captchafailed");
     exit();
   } else {
     $sql = "INSERT INTO users (first_name, last_name, email, uid, password) VALUES (?, ?, ?, ?, ?);"; // SQL Injection

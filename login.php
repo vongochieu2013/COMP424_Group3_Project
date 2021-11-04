@@ -21,6 +21,15 @@ include_once 'header.php';
         echo "<p>Incorrect login information! Please check for username or password!</p>";
       }
     }
+  if (isset($_GET["newpwd"])) {
+    if ($_GET["newpwd"] == "empty") {
+      echo "<p>Cannot leave password empty! Please start the process again!</p>";
+    } else if ($_GET["newpwd"] == "pwdnotsame") {
+      echo "<p>Password does not match! Please start the process again!</p>";
+    } else if ($_GET["newpwd"] == "passwordupdated") {
+      echo "<p>Password updated successfully!</p>";
+    }
+  }
   ?>
 </section>
 
