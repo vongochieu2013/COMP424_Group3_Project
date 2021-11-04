@@ -76,21 +76,26 @@ function uidExists($conn, $username, $email) {
 }
 
 function createUser($conn, $firstname, $lastname, $email, $username, $pwd) {
-  $sql = "INSERT INTO users (first_name, last_name, email, uid, password) VALUES (?, ?, ?, ?, ?);"; // SQL Injection
-  $stmt = mysqli_stmt_init($conn);
+  if ($_POST['captcha'] != $_SESSION['captchadigit']) {
+    header("location: ../signup.php?error=captchafailed");
+    exit();
+  } else {
+    $sql = "INSERT INTO users (first_name, last_name, email, uid, password) VALUES (?, ?, ?, ?, ?);"; // SQL Injection
+    $stmt = mysqli_stmt_init($conn);
 
-  if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("location: ../signup.php?error=stmtfailed");
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+      header("location: ../signup.php?error=stmtfailed");
+      exit();
+    }
+
+    $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT); // if this hash is not a good hash, then php automatically update a new hash method
+
+    mysqli_stmt_bind_param($stmt, "sssss", $firstname, $lastname, $email, $username, $hashedPwd);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    header("location: ../signup.php?error=none");
     exit();
   }
-
-  $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT); // if this hash is not a good hash, then php automatically update a new hash method
-
-  mysqli_stmt_bind_param($stmt, "sssss", $firstname, $lastname, $email, $username, $hashedPwd);
-  mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-  header("location: ../signup.php?error=none");
-  exit();
 }
 
 function emptyInputLogin($username, $pwd) {

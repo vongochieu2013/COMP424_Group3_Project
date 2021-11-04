@@ -15,6 +15,12 @@
         <div id="passwordDescription"></div>
         <div id="passwordStrength"></div></td></tr>
         <input type="password" name="pwdrepeat" placeholder="Repeat password...">
+        <tr><td>Security Question 1: What is your favourite animal?</td><td>
+        <input type="text" name="firstsecurityquestion" placeholder="Enter your answer...">
+        <tr><td>Security Question 2: Which high school did you attend?</td><td>
+        <input type="text" name="secondsecurityquestion" placeholder="Enter your answer...">
+        <tr><td><p><small>Are you Human?</small><img src="captcha.php" width="120" height="30" style="border:1px" alt="CAPTCHA"></p></td>
+        <td><input type="text" size="6" maxlength="5" name="captcha" value=""></td></tr>
         <button type="submit" name="submit">Sign Up</button>
       </form>
     </div>
@@ -35,6 +41,8 @@
           echo "<p>Something went wrong, try again!</p>";
         } else if ($_GET["error"] == "usernametaken") {
           echo "<p>Username already taken!</p>";
+        } else if ($_GET["error"] == "captchafailed") {
+          echo "<p>Captcha failed, please try again!</p>";
         } else if ($_GET["error"] == "none") {
           echo "<p>You have signed up!</p>";
         }
