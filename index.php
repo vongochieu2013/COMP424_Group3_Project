@@ -9,6 +9,7 @@
         echo "<p>You log in at: " . $_SESSION["datetime"]. "</p>";
         echo "<p>The total time you log in succesfully is: " . $_SESSION["successfulLogin"]. "</p>";
         echo "<p>The total time you log in failure is: " . $_SESSION["failureLogin"]. "</p>";
+        echo "<p>Last log in time is: " . $_SESSION["lastloginTime"]. "</p>";
       }
     ?>
     <h1>This is group 3!</h1>

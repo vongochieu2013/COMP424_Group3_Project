@@ -2,12 +2,12 @@
 
 if (isset($_POST["submit"])) {
 
-  $firstname = htmlspecialchars($_POST["firstname"]);
-  $lastname = htmlspecialchars($_POST["lastname"]);
-  $email = htmlspecialchars($_POST["email"]);
-  $username = htmlspecialchars($_POST["uid"]);
-  $pwd = htmlspecialchars($_POST["pwd"]);
-  $pwdRepeat = htmlspecialchars($_POST["pwdrepeat"]);
+  $firstname = strip_tags($_POST["firstname"]);
+  $lastname = strip_tags($_POST["lastname"]);
+  $email = strip_tags($_POST["email"]);
+  $username = strip_tags($_POST["uid"]);
+  $pwd = strip_tags($_POST["pwd"]);
+  $pwdRepeat = strip_tags($_POST["pwdrepeat"]);
 
   require_once 'dbh.inc.php';
   require_once 'functions.inc.php';
