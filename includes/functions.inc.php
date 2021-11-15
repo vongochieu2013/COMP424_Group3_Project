@@ -75,12 +75,25 @@ function uidExists($conn, $username, $email) {
   mysqli_stmt_close($stmt);
 }
 
-function createUser($conn, $firstname, $lastname, $email, $username, $pwd) {
+function createUser($conn, $firstname, $lastname, $email, $username, $pwd, $question1, $question2, $answer1, $answer2) {
   session_start();
   if ($_POST['captcha'] != $_SESSION['digit']) {
     header("location: ../signup.php?error=captchafailed");
     exit();
   } else {
+    $sql = "INSERT INTO security_questions (email, question_one, question_two, answer_one, answer_two) VALUES (?, ?, ?, ?, ?);"; // SQL Injection
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+      header("location: ../signup.php?error=stmtfailed");
+      exit();
+    }
+    $hashedAnswer1 = password_hash($answer1, PASSWORD_DEFAULT);
+    $hashedAnswer2 = password_hash($answer2, PASSWORD_DEFAULT);
+
+    mysqli_stmt_bind_param($stmt, "sssss",$email, $question1, $question2, $hashedAnswer1, $hashedAnswer2);
+    mysqli_stmt_execute($stmt);
+
     $sql = "INSERT INTO users (first_name, last_name, email, uid, password) VALUES (?, ?, ?, ?, ?);"; // SQL Injection
     $stmt = mysqli_stmt_init($conn);
 
@@ -165,7 +178,7 @@ function getUserLastLoginTime($conn, $username, $status) {
   if ($row = mysqli_fetch_assoc($resultData)) { // if we do get some data, we return true
     return $row['total'];
   } else {
-    $result = false;
+    $result = 'First Time Login';
     return $result;
   }
 
@@ -176,7 +189,6 @@ function loginUser($conn, $username, $pwd) {
   $uidExists = uidExists($conn, $username, $username);
   date_default_timezone_set('America/Los_Angeles');
   $datetime = date_create()->format('Y-m-d H:i:s');
-  $yoyo = "7";
 
   if ($uidExists === false) {
     $status = "failure";

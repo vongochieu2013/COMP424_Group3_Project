@@ -8,6 +8,10 @@ if (isset($_POST["submit"])) {
   $username = strip_tags($_POST["uid"]);
   $pwd = strip_tags($_POST["pwd"]);
   $pwdRepeat = strip_tags($_POST["pwdrepeat"]);
+  $question1 = $_POST["question1"];
+  $question2 = $_POST["question2"];
+  $answer1 = strip_tags($_POST["firstsecurityquestion"]);
+  $answer2 = strip_tags($_POST["secondsecurityquestion"]);
 
   require_once 'dbh.inc.php';
   require_once 'functions.inc.php';
@@ -37,7 +41,7 @@ if (isset($_POST["submit"])) {
     exit();
   }
 
-  createUser($conn, $firstname, $lastname, $email, $username, $pwd);
+  createUser($conn, $firstname, $lastname, $email, $username, $pwd, $question1, $question2, $answer1, $answer2);
 
 } else {
   header("location: ../signup.php");
