@@ -17,7 +17,7 @@ include_once 'header.php';
     if (isset($_GET["error"])) {
       if ($_GET["error"] == "usernamedoesnotexist") {
         echo "<p>Username or email doesn't exist!</p>";
-      } else if ($_GET["newpwd"] == "userisnotverified") {
+      } else if ($_GET["error"] == "userisnotverified") {
         echo "<p>You didn't register your email yet! Please check your email!</p>";
       }else if ($_GET["error"] == "wrongusernameorpassword") {
         echo "<p>Incorrect login information! Please check for username or password!</p>";
