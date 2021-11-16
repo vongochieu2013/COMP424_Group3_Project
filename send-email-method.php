@@ -35,8 +35,10 @@ function sendEmail($to, $subject, $body) {
     $mail->send();
     header("Location: index.php");
     echo 'Message has been sent';
+    return true;
 
   } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    return false;
   }
 }
